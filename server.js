@@ -1,15 +1,16 @@
 var express = require("express");
 var app = express();
 
+// app.use(express.static(__dirname + '/public'));
+app.use(express.static("style"));
+//you don;t have to write ejs files in render
+app.set("view engine", "ejs");
 
-// Routes
+////////// Routes////////////////
 app.get("/", function(req, res){
-  res.send("Hi there!");
+  res.render("homepage"); //home.ejs is off bc app.set
 });
 
-app.get("/bye", function(req,res){
-  res.send("Bye");
-});
 
 //anything can go inside subredditName.
 app.get("/r/:subredditName", function(req, res){
@@ -17,13 +18,16 @@ app.get("/r/:subredditName", function(req, res){
   res.send(`${subreddit}`);
 });
 
+
 //render ejs page
-app.get("/ejs/:thing", function(req, res){
+app.get("/thing/:thing", function(req, res){
   var thing = req.params.thing;
-  res.render("homepage.ejs", {thingVar: thing});
+  // console.log(req.params);
+  res.render("thing", {thing: thing});
 });
 
-//everything else. Order of the routes matters here.
+
+// everything else. Order of the routes matters here.
 app.get("*", function(req,res){
   res.send("You are a star");
 });
