@@ -8,6 +8,7 @@ app.get("/", function(req,res){
   res.render("search");
 });
 
+//using request to call api movies.
 app.get("/movies", function(req, res){
   var userSearch = req.query.search;
   var url = `http://www.omdbapi.com/?s=${userSearch}`;
