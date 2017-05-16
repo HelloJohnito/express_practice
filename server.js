@@ -9,17 +9,12 @@ app.set("view engine", "ejs");
 
 //tell express to use body parser
 app.use(bodyParser.urlencoded({extended: true}));
-////////// Routes////////////////
 
+
+////////// Routes////////////////
 //get
 app.get("/", function(req, res){
   res.render("homepage"); //home.ejs is off bc app.set
-});
-
-//anything can go inside subredditName.
-app.get("/r/:subredditName", function(req, res){
-  var subreddit = req.params.subredditName;
-  res.send(`${subreddit}`);
 });
 
 //render ejs page
