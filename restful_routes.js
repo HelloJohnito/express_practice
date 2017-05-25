@@ -8,7 +8,9 @@ var mongoose = require("mongoose");
 //body parsing for express
 app.use(bodyParser.urlencoded({extended: true}));
 //css files
+//public/stylesheets
 app.use(express.static("public"));
+
 app.set("view engine", "ejs");
 //mongoose set up
 mongoose.connect("mongodb://localhost/routes_app");
@@ -41,6 +43,36 @@ app.get('/blogs', function(req,res){
     }
   });
 });
+
+//new
+app.get('/blogs/new', function(req,res){
+  res.render('new');
+});
+
+//create
+app.post('/blogs', function(req,res){
+  //in the views: name="blog[title]" reason why req.body.blog
+
+  Blog.create(req.body.blog, function(err, newBlog){
+    if(err){
+      res.render("new");
+    }else {
+      res.redirect("/blogs");
+    }
+  });
+});
+
+//show
+app.get('blogs/:id', function(req,res){
+  Blog.findById(req.params.id, function(err, foundBlog){
+    if(err){
+      res.redirect("/blogs");
+    } else {
+      res.render("show", {blog: foundBlog});
+    }
+  });
+});
+
 
 
 app.listen(3000, function(){
