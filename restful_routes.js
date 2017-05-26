@@ -63,7 +63,7 @@ app.post('/blogs', function(req,res){
 });
 
 //show
-app.get('blogs/:id', function(req,res){
+app.get('/blogs/:id', function(req,res){
   Blog.findById(req.params.id, function(err, foundBlog){
     if(err){
       res.redirect("/blogs");
@@ -73,6 +73,16 @@ app.get('blogs/:id', function(req,res){
   });
 });
 
+//edit
+app.get('/blogs/:id/edit', function(req,res){
+  Blog.findById(req.params.id, function(err, foundBlog){
+    if(err){
+      res.redirect("/blogs");
+    } else {
+      res.render("edit", {blog: foundBlog});
+    }
+  });
+});
 
 
 app.listen(3000, function(){
