@@ -3,25 +3,28 @@
 
 var mongoose = require("mongoose");
 mongoose.connect("mongodb://localhost/blog_demo");
+var Post = require("./models/post");
+var User = require("./models/user");
+
 
 //schema
-var postSchema = new mongoose.Schema({
-  title: String,
-  content: String
-});
+// var postSchema = new mongoose.Schema({
+//   title: String,
+//   content: String
+// });
 
-var userSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  posts: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref:  "Post"
-  }]               // storing reference points into the user schema
-});
+// var userSchema = new mongoose.Schema({
+//   name: String,
+//   email: String,
+//   posts: [{
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref:  "Post"
+//   }]               // storing reference points into the user schema
+// });
 
 //model
-var User = mongoose.model("User", userSchema);
-var Post = mongoose.model("Post", postSchema);
+// var User = mongoose.model("User", userSchema);
+// var Post = mongoose.model("Post", postSchema);
 
 User.create({
   email: "johnny@g.com",
