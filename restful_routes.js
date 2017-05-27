@@ -3,6 +3,12 @@ var app = express();
 var bodyParser = require("body-parser");
 var mongoose = require("mongoose");
 
+//for overwriting puts and deletes.
+var methodOverride = require("method-override");
+
+//
+var expressSanitizer = require('express-sanitizer');
+
 
 //APP CONFIG
 //body parsing for express
@@ -10,6 +16,13 @@ app.use(bodyParser.urlencoded({extended: true}));
 //css files
 //public/stylesheets
 app.use(express.static("public"));
+
+//overrides for puts and delete
+app.use(methodOverride("_method"));
+
+//prevents users to insert script tags
+app.use(expressSanitizer());
+
 
 app.set("view engine", "ejs");
 //mongoose set up
@@ -51,8 +64,10 @@ app.get('/blogs/new', function(req,res){
 
 //create
 app.post('/blogs', function(req,res){
-  //in the views: name="blog[title]" reason why req.body.blog
+  //prevents users to insert script tags
+  req.body.blog.body = req.sanitize(req.body.blog.body);
 
+  //in the views: name="blog[title]" reason why req.body.blog
   Blog.create(req.body.blog, function(err, newBlog){
     if(err){
       res.render("new");
@@ -80,6 +95,34 @@ app.get('/blogs/:id/edit', function(req,res){
       res.redirect("/blogs");
     } else {
       res.render("edit", {blog: foundBlog});
+    }
+  });
+});
+
+//update
+
+//methodOverride
+//in views: in form action: ?_method= PUT
+
+app.put("/blogs/:id", function(req, res){
+  Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err, updateBlog){
+    if(err){
+      res.redirect("/blogs");
+    } else {
+      res.redirect("/blogs" + req.params.id);
+    }
+  });
+});
+
+
+//delete
+// <form action=".blogs<%=blog._id%>?_method=DELETE" method="POST" >
+app.delete("/blogs/:id", function(req,res){
+  Blog.findByIdAndRemove(req.params.id, function(err){
+    if(err){
+      res.redirect("/blogs");
+    } else {
+      res.redirect("/blogs");
     }
   });
 });
