@@ -3,6 +3,8 @@
 
 var mongoose = require("mongoose");
 mongoose.Promise = global.Promise; //gets rid of the promise deprecation error message
+
+// connects to the database
 mongoose.connect("mongodb://localhost/practice");
 
 //creates the schema
